@@ -1,0 +1,64 @@
+name: Format, test and build
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+
+
+env:
+  RUST: 1.82
+
+jobs:
+  fmt:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Format Rust Project
+        run: |
+          rustup default ${{ env.RUST }}
+          rustup component add rustfmt
+          cargo fmt --manifest-path=./Cargo.toml --all --check    
+
+  clippy:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Rust
+        run: |
+          rustup default ${{ env.RUST }}
+          rustup component add clippy
+
+      - name: Clippy Rust Project
+        run: cargo clippy --manifest-path=./Cargo.toml --all-targets --all-features --release -- --no-deps
+
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Rust
+        run: |
+          rustup default ${{ env.RUST }}
+          rustup component add clippy
+
+      - name: Build Rust Project
+        run: cargo build --manifest-path=./Cargo.toml --release
+
+  test:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Rust
+        run: |
+          rustup default ${{ env.RUST }}
+          rustup component add clippy
+
+      - name: Test Rust Project
+        run: cargo test --manifest-path=./Cargo.toml --release        
