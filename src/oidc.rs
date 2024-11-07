@@ -155,9 +155,6 @@ impl<UC: UserContextTrait> OidcBffClientTrait<UC> for OidcBffClient {
         &self,
         token_response: UserTokenResponse,
     ) -> Result<User<UC>, OidcError> {
-        // The user_info request uses the AccessToken returned in the token response. To parse custom
-        // claims, use UserInfoClaims directly (with the desired type parameters) rather than using the
-        // CoreUserInfoClaims type alias.
         log::debug!("fetching user info.");
 
         let user_info_request = self

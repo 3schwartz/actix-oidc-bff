@@ -59,7 +59,6 @@ pub(crate) async fn auth_callback(
         return HttpResponse::InternalServerError().body("CSRF token doesn't match.");
     }
 
-    // Exchange it for an access token and ID token.
     let token_response = match client
         .client
         .exchange_code(code.to_owned(), challenge_state.pkce_verifier)
@@ -69,7 +68,6 @@ pub(crate) async fn auth_callback(
         Err(err) => return HttpResponse::InternalServerError().body(err.to_string()),
     };
 
-    // Extract the ID token claims after verifying its authenticity and nonce.
     let id_token = match token_response.id_token() {
         Some(id_token) => id_token,
         None => {
@@ -84,8 +82,6 @@ pub(crate) async fn auth_callback(
         Err(err) => return HttpResponse::InternalServerError().body(err.to_string()),
     };
 
-    // Verify the access token hash to ensure that the access token hasn't been substituted for
-    // another user's.
     if let Some(expected_access_token_hash) = claims.access_token_hash() {
         let signing_alg = match id_token.signing_alg() {
             Ok(signing_alg) => signing_alg,
