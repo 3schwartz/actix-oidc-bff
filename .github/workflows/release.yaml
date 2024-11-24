@@ -7,8 +7,6 @@ on:
         description: "Release version, eg. 1.2.3 (Don't include a 'v'!)"
         required: true
 
-env:
-
 jobs:
   release:
     name: Releases
