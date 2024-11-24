@@ -6,6 +6,9 @@ on:
       tag:
         description: Specify the release version, e.g., 1.2.3 (Do not prefix with 'v')
         required: true
+  push:
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+'
 
 env:
   RUST: 1.82
