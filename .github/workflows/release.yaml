@@ -4,16 +4,43 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        description: "Release version, eg. 1.2.3 (Don't include a 'v'!)"
+        description: Specify the release version, e.g., 1.2.3 (Do not prefix with 'v')
         required: true
 
+env:
+  RUST: 1.82
+
 jobs:
+  build-test:
+    strategy:
+      matrix:
+        os: [ubuntu-24.04, macos-15, windows-2022]
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Rust
+        run: |
+          rustup default ${{ env.RUST }}
+          rustup component add clippy
+
+      - name: Build Rust Project
+        run: cargo build --manifest-path=./Cargo.toml --release
+
+      - name: Test Rust Project
+        run: cargo test --manifest-path=./Cargo.toml --release
+
+
   release:
     name: Releases
     runs-on: ubuntu-24.04
     permissions:
       contents: write
     environment: release
+    needs:
+      - build-test    
     steps:
       - name: Checkout sources
         uses: actions/checkout@v4
@@ -23,3 +50,20 @@ jobs:
         with:
           tag: v${{ github.event.inputs.tag }}
           name: Release v${{ github.event.inputs.tag }}        
+
+  publish:
+    name: Publish to crates.io
+    runs-on:
+    needs:
+      - release
+    environment: release
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Publish
+        run: |
+          cargo publish
+          --verbose
+          --locked
+          --dry-run
+          # --token ${{ secrets.CARGO_REGISTRY_TOKEN }}
