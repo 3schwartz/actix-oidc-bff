@@ -1,0 +1,24 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Release version, eg. 1.2.3 (Don't include a 'v'!)"
+        required: true
+
+env:
+
+jobs:
+  release:
+    name: Releases
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v4
+
+      - name: Create a GitHub release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: releases/templates/v${{ github.event.inputs.tag }}
+          name: Release v${{ github.event.inputs.tag }}        

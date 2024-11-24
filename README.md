@@ -1,5 +1,6 @@
 [![FOSSA Status](https://app.fossa.com/api/projects/custom%2B49102%2Fgithub.com%2F3schwartz%2Factix-oidc-bff.svg?type=shield&issueType=license)](https://app.fossa.com/projects/custom%2B49102%2Fgithub.com%2F3schwartz%2Factix-oidc-bff?ref=badge_shield&issueType=license)
 [![FOSSA Status](https://app.fossa.com/api/projects/custom%2B49102%2Fgithub.com%2F3schwartz%2Factix-oidc-bff.svg?type=shield&issueType=security)](https://app.fossa.com/projects/custom%2B49102%2Fgithub.com%2F3schwartz%2Factix-oidc-bff?ref=badge_shield&issueType=security)
+
 # actix-oidc-bff
 
 A comprehensive Backend For Frontend (BFF) OIDC solution for the [Actix web framework](Actix web framework), designed for secure and easy OIDC integration.
