@@ -12,7 +12,8 @@ jobs:
     name: Releases
     runs-on: ubuntu-24.04
     permissions:
-      contents: write    
+      contents: write
+    environment: release
     steps:
       - name: Checkout sources
         uses: actions/checkout@v4
@@ -20,5 +21,5 @@ jobs:
       - name: Create a GitHub release
         uses: ncipollo/release-action@v1
         with:
-          tag: releases/templates/v${{ github.event.inputs.tag }}
+          tag: v${{ github.event.inputs.tag }}
           name: Release v${{ github.event.inputs.tag }}        
