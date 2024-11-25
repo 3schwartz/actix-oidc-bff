@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        description: Specify the release version, e.g., 1.2.3 (Do not prefix with 'v')
+        description: Specify the release version prefixed with v, e.g., v1.2.3
         required: true
   push:
     tags:
@@ -54,7 +54,7 @@ jobs:
         id: get-tag
         run: |
           if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
-            echo "tag=v${{ github.event.inputs.tag }}" >> $GITHUB_ENV
+            echo "tag=${{ github.event.inputs.tag }}" >> $GITHUB_ENV
           else
             echo "tag=${{ github.ref_name }}" >> $GITHUB_ENV
           fi
@@ -63,7 +63,7 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           tag: ${{ env.tag }}
-          name: Release v${{ env.tag }}
+          name: Release ${{ env.tag }}
 
       - name: Publish to crates.io
         env:
