@@ -60,7 +60,7 @@ jobs:
           name: Release v${{ github.event.inputs.tag }}
 
       - name: Publish to crate.io
-        run: |
+        run: >
           cargo publish
           --verbose
           --locked
