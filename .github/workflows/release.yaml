@@ -27,7 +27,6 @@ jobs:
   #     - name: Set up Rust
   #       run: |
   #         rustup default ${{ env.RUST }}
-  #         rustup component add clippy
 
   #     - name: Build Rust Project
   #       run: cargo build --manifest-path=./Cargo.toml --release
@@ -37,7 +36,7 @@ jobs:
 
 
   release:
-    name: Release
+    name: Release to Github
     runs-on: ubuntu-24.04
     permissions:
       contents: write
@@ -48,16 +47,25 @@ jobs:
       - name: Checkout sources
         uses: actions/checkout@v4
 
-      - name: Set up Rust
-        run: |
-          rustup default ${{ env.RUST }}
-          rustup component add clippy        
-
       - name: Create a GitHub release
         uses: ncipollo/release-action@v1
         with:
           tag: v${{ github.event.inputs.tag }}
           name: Release v${{ github.event.inputs.tag }}
+
+
+  publish:
+    name: Publish to crates.io
+    runs-on: ubuntu-24.04
+    needs:
+      - release
+    # environment: release # not needed when having dependency to `release` step
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Rust
+        run: |
+          rustup default ${{ env.RUST }}
 
       - name: Publish to crate.io
         run: >
