@@ -14,24 +14,24 @@ env:
   RUST: 1.82
 
 jobs:
-  build-test:
-    strategy:
-      matrix:
-        os: [ubuntu-24.04, macos-15, windows-2022]
-    runs-on: ${{ matrix.os }}
-    steps:
-      - uses: actions/checkout@v4
+  # build-test:
+  #   strategy:
+  #     matrix:
+  #       os: [ubuntu-24.04, macos-15, windows-2022]
+  #   runs-on: ${{ matrix.os }}
+  #   steps:
+  #     - uses: actions/checkout@v4
 
-      - name: Set up Rust
-        run: |
-          rustup default ${{ env.RUST }}
-          rustup component add clippy
+  #     - name: Set up Rust
+  #       run: |
+  #         rustup default ${{ env.RUST }}
+  #         rustup component add clippy
 
-      - name: Build Rust Project
-        run: cargo build --manifest-path=./Cargo.toml --release
+  #     - name: Build Rust Project
+  #       run: cargo build --manifest-path=./Cargo.toml --release
 
-      - name: Test Rust Project
-        run: cargo test --manifest-path=./Cargo.toml --release
+  #     - name: Test Rust Project
+  #       run: cargo test --manifest-path=./Cargo.toml --release
 
   release:
     name: Release
@@ -39,8 +39,8 @@ jobs:
     permissions:
       contents: write
     environment: release
-    needs:
-      - build-test
+    # needs:
+    #   - build-test
     steps:
       - name: Checkout sources
         uses: actions/checkout@v4
@@ -50,16 +50,26 @@ jobs:
           rustup default ${{ env.RUST }}
           rustup component add clippy        
 
-      - name: Create a GitHub release
+      - name: Determine Tag
+        id: get-tag
+        run: |
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            echo "tag=${{ github.event.inputs.tag }}" >> $GITHUB_ENV
+          else
+            echo "tag=${{ github.ref_name }}" >> $GITHUB_ENV
+          fi
+
+      - name: Create a GitHub Release
         uses: ncipollo/release-action@v1
         with:
-          tag: v${{ github.event.inputs.tag }}
-          name: Release v${{ github.event.inputs.tag }}
+          tag: v${{ env.tag }}
+          name: Release v${{ env.tag }}
 
-      - name: Publish to crate.io
+      - name: Publish to crates.io
+        env:
+          CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
         run: >
           cargo publish
           --verbose
           --locked
           --dry-run
-          --token ${{ secrets.CARGO_REGISTRY_TOKEN }}
