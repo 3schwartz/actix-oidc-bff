@@ -8,6 +8,11 @@ description = "A comprehensive OIDC Backend for Frontend (BFF) solution for Acti
 homepage = "https://github.com/3schwartz/actix-oidc-bff"
 repository = "https://github.com/3schwartz/actix-oidc-bff"
 readme = "./README.md"
+keywords = ["oidc", "actix-web", "actix", "bff", "authentication", "authorization", "backend-for-frontend"]
+categories = ["web-programming", "authentication", "security"]
+
+[[example]]
+name = "simple"
 
 [dependencies]
 actix-web = "4"
