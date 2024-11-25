@@ -14,27 +14,24 @@ env:
   RUST: 1.82
 
 jobs:
-  # build-test:
-  #   strategy:
-  #     matrix:
-  #       os: [ubuntu-24.04, macos-15, windows-2022]
+  build-test:
+    strategy:
+      matrix:
+        os: [ubuntu-24.04, macos-15, windows-2022]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
 
-  #   runs-on: ${{ matrix.os }}
+      - name: Set up Rust
+        run: |
+          rustup default ${{ env.RUST }}
+          rustup component add clippy
 
-  #   steps:
-  #     - uses: actions/checkout@v4
+      - name: Build Rust Project
+        run: cargo build --manifest-path=./Cargo.toml --release
 
-  #     - name: Set up Rust
-  #       run: |
-  #         rustup default ${{ env.RUST }}
-  #         rustup component add clippy
-
-  #     - name: Build Rust Project
-  #       run: cargo build --manifest-path=./Cargo.toml --release
-
-  #     - name: Test Rust Project
-  #       run: cargo test --manifest-path=./Cargo.toml --release
-
+      - name: Test Rust Project
+        run: cargo test --manifest-path=./Cargo.toml --release
 
   release:
     name: Release
@@ -42,8 +39,8 @@ jobs:
     permissions:
       contents: write
     environment: release
-    # needs:
-    #   - build-test
+    needs:
+      - build-test
     steps:
       - name: Checkout sources
         uses: actions/checkout@v4
