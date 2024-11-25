@@ -25,7 +25,6 @@ jobs:
       - name: Set up Rust
         run: |
           rustup default ${{ env.RUST }}
-          rustup component add clippy
 
       - name: Build Rust Project
         run: cargo build --manifest-path=./Cargo.toml --release
@@ -48,7 +47,6 @@ jobs:
       - name: Set up Rust
         run: |
           rustup default ${{ env.RUST }}
-          rustup component add clippy        
 
       - name: Determine Tag
         id: get-tag
