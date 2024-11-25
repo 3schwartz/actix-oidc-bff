@@ -8,7 +8,7 @@ on:
         required: true
   push:
     tags:
-      - '[0-9]+.[0-9]+.[0-9]+'
+      - 'v[0-9]+.[0-9]+.[0-9]+'
 
 env:
   RUST: 1.82
@@ -54,9 +54,9 @@ jobs:
         id: get-tag
         run: |
           if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
-            echo "tag=${{ github.event.inputs.tag }}" >> $GITHUB_ENV
+            echo "tag=v${{ github.event.inputs.tag }}" >> $GITHUB_ENV
           else
-            echo "tag=${{ github.ref_name }}" >> $GITHUB_ENV
+            echo "tag=v${{ github.ref_name }}" >> $GITHUB_ENV
           fi
 
       - name: Create a GitHub Release
