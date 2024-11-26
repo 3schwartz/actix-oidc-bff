@@ -12,7 +12,7 @@ This solution is powered by the excellent [openidconnect](https://docs.rs/openid
 
 To begin using `actix-oidc-bff`, let’s look at a simple Actix web application example:
 
-```rust
+```rust,ignore
 use actix_oidc_bff::{
     middleware::{OidcAuthorization, OidcRefresh},
     oidc::{OidcBffClient, OidcClient},
@@ -83,7 +83,7 @@ To set up `actix-oidc-bff`, follow these steps:
 - Register the login and callback routes within the `/auth` scope.
 - Register the refresh middleware to handle token refreshing and user information updates.
 
-```rust
+```rust,ignore
     // Initialize the OIDC client
     let oidc_client = OidcClient::setup().await?;
 
@@ -107,7 +107,7 @@ Unauthenticated users attempting to access routes protected by either `OidcAuthe
 ### Single-Service Authentication
 
 To enforce authentication on a specific service, add `OidcAuthenticationState` as a parameter to the service.
-```rust
+```rust,ignore
 #[get("/using-context")]
 async fn using_context(_: HttpRequest, user_state: OidcAuthenticationState) -> impl Responder {
     println!("{:?}", user_state.user);
@@ -121,7 +121,7 @@ This requires the user to be authenticated and provides access to user data via 
 ### Scope-Wide Authentication
 
 To require authentication for an entire scope, use the `OidcAuthorization` middleware:
-```rust
+```rust,ignore
 ..
 #[get("/with-middleware")]
 async fn with_middleware() -> impl Responder {
@@ -139,7 +139,7 @@ async fn with_middleware() -> impl Responder {
 
 When using middleware for a scope, you don’t need to add `OidcAuthenticationState` as a parameter. However, if the service needs access to user data, you can still include it as a parameter:
 
-```rust
+```rust,ignore
 #[get("/with-middleware")]
 async fn with_middleware(user_state: OidcAuthenticationState) -> impl Responder {
     println!("{:?}", user_state.user);
