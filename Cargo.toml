@@ -1,14 +1,15 @@
 [package]
 name = "actix-oidc-bff"
-version = "0.1.0"
+version = "1.0.0"
+authors = ["Søren Schwartz"]
 edition = "2021"
 rust-version = "1.82"
 license = "MIT"
 description = "A comprehensive OIDC Backend for Frontend (BFF) solution for Actix-web, enabling secure token handling, user authentication, and authorization."
 homepage = "https://github.com/3schwartz/actix-oidc-bff"
 repository = "https://github.com/3schwartz/actix-oidc-bff"
-readme = "./README.md"
-keywords = ["oidc", "actix-web", "actix", "bff", "authentication", "authorization", "backend-for-frontend"]
+readme = "README.md"
+keywords = ["actix-web", "actix", "openidconnect", "openid", "oidc", "bff", "authentication", "authorization", "backend-for-frontend", "auth"]
 categories = ["web-programming", "authentication", "security"]
 
 [[example]]
